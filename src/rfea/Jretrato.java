@@ -242,6 +242,7 @@ public class Jretrato extends javax.swing.JFrame {
             }
         });
     }
+    //hola Dios te Bemdiga
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Buscar;
