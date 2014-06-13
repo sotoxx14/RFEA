@@ -12,6 +12,7 @@ import java.net.URLDecoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.opencv.core.Core;
+import org.opencv.core.Mat;
 
 /**
  *
@@ -26,7 +27,47 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         System.out.println(rutaDe("/"));
     }
+    private  Mat rostro=new Mat(),ojo_d=new Mat(),ojo_i=new Mat(),nariz=new Mat(),boca=new Mat();
 
+    public  Mat getRostro() {
+        return rostro;
+    }
+
+    public void setRostro(Mat rostro) {
+        this.rostro = rostro;
+    }
+
+    public Mat getOjo_d() {
+        return ojo_d;
+    }
+
+    public void setOjo_d(Mat ojo_d) {
+        this.ojo_d = ojo_d;
+    }
+
+    public Mat getOjo_i() {
+        return ojo_i;
+    }
+
+    public void setOjo_i(Mat ojo_i) {
+        this.ojo_i = ojo_i;
+    }
+
+    public Mat getNariz() {
+        return nariz;
+    }
+
+    public void setNariz(Mat nariz) {
+        this.nariz = nariz;
+    }
+
+    public Mat getBoca() {
+        return boca;
+    }
+
+    public void setBoca(Mat boca) {
+        this.boca = boca;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

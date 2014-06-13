@@ -6,16 +6,22 @@
 
 package rfea;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import org.opencv.core.Core;
 import org.opencv.core.MatOfRect;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -110,11 +116,14 @@ class ProcesarImagen {
     MatOfRect faceDetections = new MatOfRect();
     faceDetector.detectMultiScale(image, faceDetections);
     contRostros=faceDetections.toArray().length;
-    if (contRostros<1&&cont<3){
-        cont++;
-        DetectarRostro();
+   if (contRostros<1){
+        System.out.println("No se an detectado rostros, profavor acerquese a la camara en una posicion adecuada");
         return;
-    }
+    }else
+        if(contRostros>1){
+            System.out.println("se dectactaron mas de 1 rostros, seleecione 1 para evaluar");
+           
+    }else{
 
     System.out.println(String.format("%s rostro Detectado, en la iteracion: "+cont, faceDetections.toArray().length));
 
@@ -132,7 +141,8 @@ class ProcesarImagen {
     System.out.println(String.format("Guardado %s", filename));
     Highgui.imwrite(filename,image);
     recortarRostro();
-    
+        }
+
 
   }
   
@@ -252,11 +262,7 @@ Mat topRightOfFace = tmp.clone().submat(new Rect(rightX, topY, widthX, heightY))
     MatOfRect deteccionBoca = new MatOfRect();
     faceDetector.detectMultiScale(tmp, deteccionBoca);
     contRostros=deteccionBoca.toArray().length;
-    if (contRostros<1&&cont<3){
-        cont++;
-        detectarOjos();
-        return;
-    }
+ 
 
 
     // Draw a bounding box around each face.
@@ -278,6 +284,7 @@ Mat topRightOfFace = tmp.clone().submat(new Rect(rightX, topY, widthX, heightY))
     System.out.println(String.format("Guardado %s", filename));
     Highgui.imwrite(filename,tmp);
     recortaBoca();
+        
       
   }
   public void detectarNariz(){//
@@ -316,7 +323,7 @@ Mat topRightOfFace = tmp.clone().submat(new Rect(rightX, topY, widthX, heightY))
         for (int i=0; i<detectarNariz.toArray().length;i++){
             
             roiNariz=detectarNariz.toArray()[i];
-                        if(roiNariz.y>tmp.height()/4&&roiNariz.x>tmp.width()/4&&roiNariz.y<tmp.height()-(tmp.height()/4)&&roiNariz.x<tmp.width()-tmp.width()/4){//tomala boca detectada en la region del centro de la cara hacia abajo
+                        if(roiNariz.y>tmp.height()/4){//tomala boca detectada en la region del centro de la cara hacia abajo
                 contnar++;
         Core.rectangle(tmp, new Point(roiNariz.x, roiNariz.y), new Point(roiNariz.x + roiNariz.width, roiNariz.y + roiNariz.height), new Scalar(0, 255, 0));
                         }
@@ -400,4 +407,20 @@ canny.copyTo(tmp);*/
     Highgui.imwrite(filename,tmp);
             
   }
+    public BufferedImage matABfIMg(Mat image) {
+
+        MatOfByte bytemat = new MatOfByte();
+        Highgui.imencode(".jpg", image, bytemat);
+        byte[] bytes = bytemat.toArray();
+        InputStream in = new ByteArrayInputStream(bytes);
+        BufferedImage img;
+        img = null;
+        try {
+            img = ImageIO.read(in);
+        } catch (IOException ex) {
+            Logger.getLogger(ProcesarImagen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return img;
+
+    }
 }
