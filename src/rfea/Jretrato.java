@@ -239,7 +239,7 @@ public class Jretrato extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Jretrato().setVisible(true);
-            }
+            }// orale
         });
     }
     //hola Dios te Bemdiga
