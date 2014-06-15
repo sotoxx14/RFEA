@@ -46,8 +46,8 @@ public class FrameDemo extends JFrame {
         setLayout(new BorderLayout());
         selector = new SelectorAreaImagen();
         try {
-            System.out.println(rutaDeURL("/cl/leopard/imagen/bmw_bobber.jpg"));
-            selector.setImagen(ImageIO.read(getClass().getClassLoader().getResource("cl/leopard/imagen/bmw_bobber.jpg")));
+            System.out.println(rutaDeURL("/bmw_bobber.jpg"));
+            selector.setImagen(ImageIO.read(getClass().getClassLoader().getResource("bmw_bobber.jpg")));
         } catch (IOException ex) {
             Logger.getLogger(FrameDemo.class.getName()).log(Level.SEVERE, null, ex);
         }

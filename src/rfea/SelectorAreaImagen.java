@@ -141,7 +141,10 @@ public class SelectorAreaImagen extends JPanel {
             return;
         }
         if (puntoInicial != null && puntoFinal != null) {
+            try{
             g.drawImage(imagen, op, 0, 0);
+            }
+            catch(IllegalArgumentException e){}
             g.drawImage(getImagenSeleccionada(), x, y, this);
             g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             g.setColor(Color.WHITE);

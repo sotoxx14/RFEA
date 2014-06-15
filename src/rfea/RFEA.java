@@ -9,6 +9,7 @@ package rfea;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.opencv.core.Core;
 
 /**
  *
@@ -36,6 +37,8 @@ public class RFEA {
         **/
             //inicio de codigo
          try {
+           // System.loadLibrary( Core.NATIVE_LIBRARY_NAME);
+
             System.setProperty( "java.library.path", path );
             Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
             fieldSysPath.setAccessible( true );

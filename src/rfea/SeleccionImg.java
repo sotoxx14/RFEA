@@ -6,51 +6,90 @@
 
 package rfea;
 
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.JDialog;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 
 /**
  *
  * @author mery-pc
  */
-public class SeleccionImg extends javax.swing.JInternalFrame {
+public class SeleccionImg extends JFrame{
+    private static final long serialVersionUID = 8937119421588637012L;
     private SelectorAreaImagen selector;
     /**
      * Creates new form SeleccionImg
      */
     public SeleccionImg() {
         initComponents();
+        initGUI();
     }
     public void Agregar(){
-        jPanel1.add(this);
-                }
-        private void initGUI() {
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(DISPOSE);
         setLayout(new BorderLayout());
         selector = new SelectorAreaImagen();
-         //   selector.setImagen(ImageIO.read());
+                }
+        private void initGUI() {
+                        System.out.println("gola: "+rutaDeURL("/test.jpg"));
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        setLayout(new BorderLayout());
+        selector = new SelectorAreaImagen();
+        System.out.println(rutaDeURL("/test.jpg"));
+        selector.setImagen(ProcesarImagen.matABfIMg(ProcesarImagen.getImage()));
         add(selector, BorderLayout.CENTER);
+        
         selector.addSelectorListener(new SelectorAreaListener() {
 
             public void areaSeleccionada(BufferedImage imagen) {
                 SelectorAreaImagen s = new SelectorAreaImagen(imagen);
-           //     JDialog d = new JDialog(FrameDemo.this);
-             //   d.add(s);
-               // d.pack();
-               // d.setVisible(true);
+                JDialog d = new JDialog(SeleccionImg.this);
+               // jScrollPane1.add(d);
+                d.add(s);
+                d.pack();
+                d.setVisible(true);
             }
         });
         setTitle("Demo " + selector.getClass().getName());
         pack();
         setResizable(false);
     }
+    public String rutaDe (String recurso){
+        String ruta = getClass().getResource(recurso).getPath();
+        //System.out.println(ruta);
+        try {
+            ruta=URLDecoder.decode(ruta, "UTF-8"); //this will replace %20 with spaces
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(FrameDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return ruta;
+    }
+           public URL rutaDeURL(String recurso){
+        URL ruta = getClass().getResource(recurso);
+    return ruta;
+    
+    }
+        
+           
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
 
+            public void run() {
+                SeleccionImg frame = new SeleccionImg();
+                frame.setVisible(true);
+            }
+        });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,35 +99,17 @@ public class SeleccionImg extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 392, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
-        );
-
-        jScrollPane1.setViewportView(jPanel1);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
+            .addGap(0, 406, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
+            .addGap(0, 292, Short.MAX_VALUE)
         );
 
         pack();
@@ -96,7 +117,5 @@ public class SeleccionImg extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

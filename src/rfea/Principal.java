@@ -6,8 +6,10 @@
 
 package rfea;
 
+import java.awt.Component;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,55 +20,64 @@ import org.opencv.core.Mat;
  *
  * @author sotoxx
  */
-public class Principal extends javax.swing.JFrame {
+public  class Principal extends javax.swing.JFrame {
 
     /**
      * Creates new form Principal
      */
     public Principal() {
         initComponents();
-        System.out.println(rutaDe("/"));
-    }
-    private  Mat rostro=new Mat(),ojo_d=new Mat(),ojo_i=new Mat(),nariz=new Mat(),boca=new Mat();
+        setearLibPath("/usr/local/lib/:/usr/local/share/OpenCV/java/");
 
-    public  Mat getRostro() {
+        System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
+        System.out.println(rutaDe("/"));
+        System.out.println("gola: "+rutaDeURL("/test.jpg"));
+    }
+    
+    private static Mat rostro;
+    private static Mat ojo_d;
+    private static Mat ojo_i;
+    private static Mat nariz;
+    private static Mat boca;
+
+    public static   Mat getRostro() {
         return rostro;
     }
 
-    public void setRostro(Mat rostro) {
-        this.rostro = rostro;
+    public static void setRostro(Mat rostro) {
+        Principal.rostro = rostro;
     }
 
-    public Mat getOjo_d() {
+    public static Mat getOjo_d() {
         return ojo_d;
     }
 
-    public void setOjo_d(Mat ojo_d) {
-        this.ojo_d = ojo_d;
+    public  void setOjo_d(Mat ojo_d) {
+        Principal.ojo_d = ojo_d;
     }
 
-    public Mat getOjo_i() {
+    public static Mat getOjo_i() {
         return ojo_i;
     }
 
     public void setOjo_i(Mat ojo_i) {
-        this.ojo_i = ojo_i;
+        Principal.ojo_i = ojo_i;
     }
 
-    public Mat getNariz() {
+    public static Mat getNariz() {
         return nariz;
     }
 
     public void setNariz(Mat nariz) {
-        this.nariz = nariz;
+        Principal.nariz = nariz;
     }
 
-    public Mat getBoca() {
+    public static Mat getBoca() {
         return boca;
     }
 
     public void setBoca(Mat boca) {
-        this.boca = boca;
+        Principal.boca = boca;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,6 +89,7 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -94,6 +106,9 @@ public class Principal extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        desktopPane.add(jScrollPane1);
+        jScrollPane1.setBounds(0, 0, 2, 2);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -141,10 +156,20 @@ public class Principal extends javax.swing.JFrame {
 
         cutMenuItem.setMnemonic('t');
         cutMenuItem.setText("Cut");
+        cutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                //cutMenuItemActionPerformed(evt);
+            }
+        });
         editMenu.add(cutMenuItem);
 
         copyMenuItem.setMnemonic('y');
         copyMenuItem.setText("Copy");
+        copyMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyMenuItemActionPerformed(evt);
+            }
+        });
         editMenu.add(copyMenuItem);
 
         pasteMenuItem.setMnemonic('p');
@@ -223,15 +248,12 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         //
-        setearLibPath("/usr/local/lib/:/usr/local/share/OpenCV/java/");
         ProcesarImagen procDetectaRostro;
         procDetectaRostro =new ProcesarImagen();
-        procDetectaRostro.setImagenEntrada("test.png");
+        procDetectaRostro.setImagenEntrada("test.jpg");
         procDetectaRostro.setImagenSalida("detectado.png");
         procDetectaRostro.DetectarRostro();
-        procDetectaRostro.detectarOjos();
-        procDetectaRostro.detectarNariz();
-        procDetectaRostro.detectarBoca();
+        
         //System.out.println(procDetectaRostro.rutaDe("/recursos/lbpcascade_frontalface.xml"));
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
@@ -245,10 +267,26 @@ public class Principal extends javax.swing.JFrame {
         }
     return ruta;
     }
+         public static void añadir( Component o){
+             jScrollPane1.add(o);
+             o.setVisible(true);
+         
+         }
+         public URL rutaDeURL(String recurso){
+        URL ruta = getClass().getResource(recurso);
+    return ruta;
+    
+    }
+         
     private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
         // TODO add your handling code here:
         new Jretrato().setVisible(true);
     }//GEN-LAST:event_saveAsMenuItemActionPerformed
+
+    private void copyMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyMenuItemActionPerformed
+        // TODO add your handling code here:
+        new SeleccionImg().setVisible(true);
+    }//GEN-LAST:event_copyMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -283,7 +321,7 @@ public class Principal extends javax.swing.JFrame {
                 new Principal().setVisible(true);
             }
         });
-    }
+    } 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
@@ -296,6 +334,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
+    private  static javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;

@@ -39,7 +39,7 @@ class ProcesarImagen {
     private String imagenEntrada="",imagenSalida="rostro_detectado.png";
     private String rcDir="recursos";//directorio de recursos
     int contRostros=0,cont=0;
-    Mat image,imgRostro,imgBoca,tmp;
+    static Mat image,imgRostro,imgBoca,tmp;
     Rect roiRostro= new Rect(),roiNariz=new Rect(),roiBoca=new Rect();
     Rect[] roiOjos=new Rect[2];
     //private String cascadasrostro[] = new String[10]=;
@@ -53,6 +53,10 @@ class ProcesarImagen {
         float EYE_SW = 0.30f;
         float EYE_SH = 0.28f;
     //fin configuracion de constantes basicas
+        
+        public static Mat getImage() {
+        return image;
+    }
     
      public ProcesarImagen() {
          rcDir=sepDir+rcDir+sepDir;
@@ -108,7 +112,6 @@ class ProcesarImagen {
     equalizeHist(image, image);
    
     tmp=image;
-
     //    
 
     // Detect faces in the image.
@@ -122,6 +125,13 @@ class ProcesarImagen {
     }else
         if(contRostros>1){
             System.out.println("se dectactaron mas de 1 rostros, seleecione 1 para evaluar");
+            for (int i=0; i<faceDetections.toArray().length;i++){
+            
+            roiRostro=faceDetections.toArray()[i];
+        Core.rectangle(image, new Point(roiRostro.x, roiRostro.y), new Point(roiRostro.x + roiRostro.width, roiRostro.y + roiRostro.height), new Scalar(0, 255, 0));
+    }
+            Principal.setRostro(image);
+           new SeleccionImg().setVisible(true);
            
     }else{
 
@@ -140,11 +150,17 @@ class ProcesarImagen {
     String filename = imagenSalida;
     System.out.println(String.format("Guardado %s", filename));
     Highgui.imwrite(filename,image);
-    recortarRostro();
+    recortarRostro();    
+    this.detectarOjos();
+        this.detectarNariz();
+        detectarBoca();
         }
+    
 
 
   }
+
+    
   
   public void detectarOjos(){
       System.out.println("\nDetectando Ojos");
@@ -407,7 +423,7 @@ canny.copyTo(tmp);*/
     Highgui.imwrite(filename,tmp);
             
   }
-    public BufferedImage matABfIMg(Mat image) {
+    public static BufferedImage matABfIMg(Mat image) {
 
         MatOfByte bytemat = new MatOfByte();
         Highgui.imencode(".jpg", image, bytemat);
